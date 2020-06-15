@@ -20,7 +20,9 @@ r = sr.Recognizer()
 
 def speak(audio):
     print(audio)
+    print("\n")
     engine.say(audio)
+    print("\n")
     engine.runAndWait()
 
 
@@ -88,10 +90,10 @@ def execute_command(command):
         speak("According to wikipedia, ")
         speak(results)
     
-    elif "play music" in command or "play a song" in command or "play songs" in command:
+    elif "play music" in command or "play a song" in command or "play songs" in command or "play song" in command:
         speak("Which song do you want me to play?")
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, duration = 1)
+            r.adjust_for_ambient_noise(source, duration = 2)
             audio = r.listen(source)
             voice_data = r.recognize_google(audio)
             if voice_data == "any" or voice_data == "anything" or voice_data =="random":
@@ -125,6 +127,12 @@ def execute_command(command):
         minutes = int(now.minute)        
         speak("The time is {} hours and {} minutes.".format(str(hour),str(minutes)))
 
+    elif "how are you" in command or "what's up" in command or "whats up" in command:
+        speak("Everything's great. Thanks for asking.")
+
+    elif "what can you do for me" in command or "do something" in command:
+        speak("I can play a song for you. i can tell you jokes. Try me.")
+
     elif "sing a song" in command:
         speak("I am a robot. I am not able to sing yet.")
     
@@ -133,6 +141,16 @@ def execute_command(command):
     
     elif "nothing" in command:
         speak("I am so sorry. I am useless.")
+
+    elif "maps" in command or "location" in command:
+        speak("Which location do you want me to show you on maps? ")
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration = 2)
+            audio = r.listen(source)
+            voice_data = r.recognize_google(audio)
+            url = "https://www.google.com/maps/place/" + voice_data
+            speak("Locating {}...".format(voice_data))
+            webbrowser.open(url)
 
     else:
         speak("Sorry. I did not get you.")
